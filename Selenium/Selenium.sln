@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Selenium", "Selenium.csproj", "{B49C8B8F-37E7-489B-AB65-65CDB8E8D4EF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Selenium", "Selenium.csproj", "{B49C8B8F-37E7-489B-AB65-65CDB8E8D4EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GmailUnitTests", "..\GmailUnitTests\GmailUnitTests.csproj", "{8D07D567-06D8-4AA5-B690-ACE2E8693102}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{B49C8B8F-37E7-489B-AB65-65CDB8E8D4EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B49C8B8F-37E7-489B-AB65-65CDB8E8D4EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B49C8B8F-37E7-489B-AB65-65CDB8E8D4EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D07D567-06D8-4AA5-B690-ACE2E8693102}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D07D567-06D8-4AA5-B690-ACE2E8693102}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D07D567-06D8-4AA5-B690-ACE2E8693102}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D07D567-06D8-4AA5-B690-ACE2E8693102}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
