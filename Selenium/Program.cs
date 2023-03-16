@@ -1,6 +1,5 @@
 ﻿using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium;
-using Microsoft.VisualBasic.FileIO;
 
 namespace Selenium;
 public class Program
@@ -16,28 +15,24 @@ public class Program
         WebDriver driver = new ChromeDriver();
 
         Credentials credentials1 = new Credentials(_login1, _password1);
-        Credentials credentials2 = new Credentials(_login2, _password2);
+        Credentials credentials2 = new Credentials(_login2, _password2);        
+        string title = "New title(test)";
+        string sentMessage = RandomValueGenerator.RandomString(10);
+        string responseMessage = RandomValueGenerator.RandomString(10);
+        LetterInfo sentLetterInfo = new LetterInfo(title, sentMessage, credentials2.UserName);
 
         Gmail mail = new Gmail(driver);
-        mail.NavigateToGmail();
-
-        string title = "New title(test)";
-        string letterText = RandomValueGenerator.RandomString(10);
-        string letterText2 = RandomValueGenerator.RandomString(10);
-
         mail.LogIn(credentials1);
-        mail.SendLetter(credentials2.UserName, title, letterText);
+        mail.SendLetter(sentLetterInfo);
         mail.LogOut();
 
-        mail.NavigateToGmail();
         mail.LogIn(credentials2);
-        mail.LetterCheck(letterText);
-        mail.ReplyToLetter(letterText, letterText2);
+        mail.NavigateToLetter(sentMessage);
+        mail.ReplyToLetter(responseMessage);
         mail.LogOut();
 
-        mail.NavigateToGmail();
         mail.LogIn(credentials1);
-        mail.LetterCheck(letterText2);
+        mail.NavigateToLetter(responseMessage);
 
         driver.Close();            
     }

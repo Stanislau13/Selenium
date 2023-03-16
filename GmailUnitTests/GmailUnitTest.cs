@@ -1,15 +1,101 @@
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium;
 using Selenium;
-using NUnit.Framework.Internal;
+//using NUnit.Framework.Internal;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
+using System.IO;
+//using NUnit.Framework;
 
 namespace GmailUnitTests;
 
 [TestClass]
-public class GmailUnitTest
+public class GmailUnitTest : BaseUnitTest
 {
-    private const string _login1 = "taskqaautotest1@gmail.com";
+    private Gmail _gmail;
+
+    private string _sentLettersUrl = "https://mail.google.com/mail/u/1/?ogbl#sent";
+    private readonly By _letterBodyXPath = By.XPath("//div[@class='a3s aiL '][1]");
+
+    private readonly string _letterBody = RandomValueGenerator.RandomString(10);
+    private readonly string _letterBody2 = RandomValueGenerator.RandomString(10);
+
+
+    [TestInitialize]
+    public void Inicialization()
+    {
+        BaseInicialization();
+        _gmail = new Gmail(_driver);
+    }
+
+    [TestMethod]
+    [DataRow(_login1, _password1)]
+    [DataRow(_login2, _password2)]
+    public void CheckLogIn(string username, string password)
+    {
+        Credentials credentials = new Credentials(username, password);
+        _gmail.LogIn(credentials);
+
+        CheckCurrentUrl("#inbox", true);
+    }
+
+    [TestMethod]
+    public void CheckSendLetter()
+    {
+        LogIn(_login1, _password1);
+        LetterInfo letterInfo = CreateLetterInfo(_login2);
+        _gmail.SendLetter(letterInfo);
+
+        CheckLetterInSentFolder(letterInfo.Body);
+    }
+
+    [TestMethod]
+    public void CheckNavigateToLetter()
+    {
+        CheckSendLetter();
+        LogOut();
+        LogIn(_login2, _password2);
+        _gmail.NavigateToLetter(_letterBody);
+
+        CheckIfElementTextContains(_letterBodyXPath, _letterBody);
+    }
+
+    [TestMethod]
+    public void CheckrReplyToLetter()
+    {
+        CheckNavigateToLetter();
+        _gmail.ReplyToLetter(_letterBody2);
+
+        CheckLetterInSentFolder(_letterBody2);
+    }
+
+    [TestMethod]
+    [DataRow(_login1, _password1)]
+    [DataRow(_login2, _password2)]
+    public void CheckClickLogOutButton(string username, string password)
+    {
+        LogIn(username, password);
+        _gmail.LogOut();
+ 
+        WaitUntil.WaitSomeInterval(3);
+        CheckCurrentUrl("www.google.com/gmail/about", true);
+    }
+
+    private void CheckLetterInSentFolder(string letterBody)
+    {
+        _driver.Navigate().GoToUrl(_sentLettersUrl);
+
+        By xPath = InboxPage.GetLetterxPath(letterBody);
+        CheckIfElementDisplayed(xPath);
+    }
+
+    private LetterInfo CreateLetterInfo(string recipient)
+    {
+        string title = RandomValueGenerator.RandomString(10);
+        return new LetterInfo(title, _letterBody, recipient);
+    }
+
+
+    /*private const string _login1 = "taskqaautotest1@gmail.com";
     private const string _password1 = "123123123test";
 
     private const string _login2 = "taskqaautotest3@gmail.com";
@@ -28,15 +114,26 @@ public class GmailUnitTest
     Credentials credentials1 = new Credentials(_login1, _password1);
     Credentials credentials2 = new Credentials(_login2, _password2);
 
+    [SetUp]
+    public void Inicialization() 
+    {
+        WebDriver driver = new ChromeDriver();
+        Gmail mail = new Gmail(driver);
+    }
+
+
+    
 
     [TestMethod]
-    public void CheckLogInPositive()
+    //[DataRow(_login1, _password1)]
+    //[DataRow(_login1, "123123123")]
+    public void CheckLogInPositive(string login, string pass)
     {
         WebDriver driver = new ChromeDriver();
         Gmail mail = new Gmail(driver);
 
         mail.NavigateToGmail();
-        mail.LogIn(credentials1);
+        mail.LogIn(new Credentials(login, pass));
 
         WaitUntil.WaitElement(driver, _accountManagementButton);
         driver.FindElement(_accountManagementButton).Click();
@@ -87,6 +184,9 @@ public class GmailUnitTest
 
         driver.Quit();
     }
+    [SetUp]
+    [TearDown]
+
 
     [TestMethod]
     public void CheckLetterReceivedPositive()
@@ -99,7 +199,7 @@ public class GmailUnitTest
         mail.SendLetter(_login2, "Hello", letterText);
         mail.LogOut();
 
-        WaitUntil.WaitSomeIntervl(5);
+        WaitUntil.WaitSomeInterval(5);
 
         mail.NavigateToGmail();
         mail.LogIn(credentials2);
@@ -158,7 +258,7 @@ public class GmailUnitTest
         mail.ReplyToLetter(letterText, letterText2);
         mail.LogOut();
 
-        WaitUntil.WaitSomeIntervl(1);
+        WaitUntil.WaitSomeInterval(1);
         mail.NavigateToGmail();
         mail.LogIn(credentials1);
 
@@ -169,8 +269,9 @@ public class GmailUnitTest
 
         driver.Quit();
     }
-
-    private By LetterXPath(string letterText) {
-        return By.XPath($"//*[contains(text(), '{letterText}')]");
-    }
+*/
+    /*    private By LetterXPath(string letterText) 
+        {
+            return By.XPath($"//*[contains(text(), '{letterText}')]");
+        }*/
 }
