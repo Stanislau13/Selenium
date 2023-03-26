@@ -1,6 +1,4 @@
-﻿
-
-namespace Selenium;
+﻿namespace Selenium;
 
 public class LetterInfo
 {

@@ -2,31 +2,27 @@
 
 namespace Selenium;
 
-
-public class AccountFrame
+public class AccountFrame : Page
 {
-    private readonly By _accountManagementButton = By.XPath("//a[@class='gb_e gb_1a gb_s']");
-    private readonly By _accountLogOuttButton = By.XPath("//div[text()='Выйти']");
+    const string ACCOUNT_MANAGEMENT_BUTTON = "//a[@class='gb_e gb_1a gb_s']";
+    const string ACCOUNT_LOG_OUT_BUTTON = "//div[text()='Выйти']";
+    const string FRAME_NAME = "account";
 
-    private IWebDriver _driver;
-
-    public AccountFrame(IWebDriver driver)
+    private AccountFrame(IWebDriver driver) : base(driver)
     {
-        _driver = driver;
     }
 
-    public void Navigate()
+    public static AccountFrame Navigate(IWebDriver driver)
     {
-        WaitUntil.WaitElement(_driver, _accountManagementButton);
-        _driver.FindElement(_accountManagementButton).Click();
-
-        WaitUntil.WaitSomeInterval(2);
-        _driver.SwitchTo().Frame("account");
+        AccountFrame accountFrame = new AccountFrame(driver);
+        accountFrame.ClickElement(ACCOUNT_MANAGEMENT_BUTTON);
+        accountFrame.SwitchToFrame(FRAME_NAME);
+        accountFrame.WaitSomeInterval(2);
+        return accountFrame;
     }
 
     public void ClickLogOutButton()
     {
-        WaitUntil.WaitElement(_driver, _accountLogOuttButton);
-        _driver.FindElement(_accountLogOuttButton).Click();
+        ClickElement(ACCOUNT_LOG_OUT_BUTTON);
     }
 }

@@ -1,51 +1,62 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
 
 namespace Selenium;
 
 public class Gmail
 {
-    private SignInPage _signInPage;
-    private InboxPage _inboxPage;
-    private NewLetterWindow _newLetterWindow;
-    private AccountFrame _accountFrame;
+    private WebDriver _driver;
 
-    public Gmail(IWebDriver driver)
+    public Gmail()
     {
-        _signInPage = new SignInPage(driver);
-        _inboxPage = new InboxPage(driver);
-        _newLetterWindow = new NewLetterWindow(driver);
-        _accountFrame = new AccountFrame(driver);
+        _driver = new ChromeDriver();
     }
 
-    public void LogIn(Credentials credentials)
+    public SignInPage LogIn(Credentials credentials)
     {
-        _signInPage.Navigate();
-        _signInPage.LogIn(credentials);
+        SignInPage signInPage = SignInPage.Navigate(_driver);
+        signInPage.LogIn(credentials);
+        return signInPage;
     }
 
-    public void SendLetter(LetterInfo letterinfo)
+    public NewLetterWindow SendLetter(LetterInfo letterinfo)
     {
-        _newLetterWindow.Navigate();
-        _newLetterWindow.FillLetterFields(letterinfo);
-        _newLetterWindow.Send();
+        NewLetterWindow newLetterWindow = NewLetterWindow.Navigate(_driver);
+        newLetterWindow.FillLetterFields(letterinfo);
+        newLetterWindow.Send();
+        return newLetterWindow;
     }
 
-    public void NavigateToLetter(string receivedMessage)
+    public InboxPage NavigateToInboxLetter(string receivedMessage)
     {
-        _inboxPage.Navigate();
-        _inboxPage.OpenLetter(receivedMessage);
+        InboxPage inboxPage = InboxPage.Navigate(_driver);
+        inboxPage.OpenLetter(receivedMessage);
+        return inboxPage;
     }
 
-    public void ReplyToLetter(string responseMessage)
-    {        
-        _inboxPage.ClickReplyButton();
-        _inboxPage.FillResponseMessage(responseMessage);
-        _inboxPage.ClickSendButton();
+    public SentPage NavigateToSentPage()
+    {
+        return SentPage.Navigate(_driver);
     }
 
-    public void LogOut()
+    public InboxPage ReplyToLetter(string receivedMessage, string responseMessage)
     {
-        _accountFrame.Navigate();
-        _accountFrame.ClickLogOutButton();
+        InboxPage inboxPage = NavigateToInboxLetter(receivedMessage);
+        inboxPage.ClickReplyButton();
+        inboxPage.FillResponseMessage(responseMessage);
+        inboxPage.ClickSendButton();
+        return inboxPage;
+    }
+
+    public AccountFrame LogOut()
+    {
+        AccountFrame accountFrame = AccountFrame.Navigate(_driver);
+        accountFrame.ClickLogOutButton();
+        return accountFrame;
+    }
+
+    public void Close()
+    {
+        _driver.Close();
     }
 }

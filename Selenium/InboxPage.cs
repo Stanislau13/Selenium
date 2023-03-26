@@ -1,58 +1,49 @@
-﻿
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 
 namespace Selenium;
 
-public class InboxPage
+public class InboxPage : Page
 {
-    private readonly By _replyButton = By.XPath("//span[@class='ams bkH']");
-    private readonly By _replyTextOfTheLetterInputFild = By.XPath("//div[@class='Am aO9 Al editable LW-avf tS-tW']");
-    private readonly By _replyLetterEnterButton = By.XPath("//div[@class='T-I J-J5-Ji aoO v7 T-I-atl L3']");
+    const string REPLY_BUTTON = "//span[@class='ams bkH']";
+    const string REPLY_TEXT_OF_THE_LETTER_INPUT_FILD = "//div[@class='Am aO9 Al editable LW-avf tS-tW']";
+    const string REPLY_LETTER_ENTER_BUTTON = "//div[@class='T-I J-J5-Ji aoO v7 T-I-atl L3']";
+    const string LETTER_BODY_XPATH = "//div[@class='a3s aiL '][1]";
+    const string URL = "https://mail.google.com/mail/u/1/?ogbl#inbox";
 
-    private IWebDriver _driver;
-
-    public InboxPage(IWebDriver driver)
-    {
-        _driver = driver;
+    private InboxPage(IWebDriver driver, string url) : base(driver, url)
+    {        
     }
 
-    public void Navigate()
+    public static InboxPage Navigate(IWebDriver driver)
     {
-        _driver.Navigate().GoToUrl("https://mail.google.com/mail/u/1/?ogbl#inbox");
-    }
-
-    public void OpenLetter(string letterBody)
-    {
-        By letterXPath = GetLetterxPath(letterBody);
-        IWebElement letter = WaitUntil.WaitElementWithRefresh(_driver, letterXPath);
-        Console.WriteLine($"Found letter is {letter.Text}");
-        letter.Click();
-        WaitUntil.WaitSomeInterval(2);
-    }
+        return new InboxPage(driver, URL);
+    }    
 
     public void ClickReplyButton()
     {
-        WaitUntil.WaitElement(_driver, _replyButton);
-        _driver.FindElement(_replyButton).Click();
+        ClickElement(REPLY_BUTTON);
     }
 
     public void FillResponseMessage(string responseMessage)
     {
-        WaitUntil.WaitSomeInterval(2);
-        WaitUntil.WaitElement(_driver, _replyTextOfTheLetterInputFild);
-        _driver.FindElement(_replyTextOfTheLetterInputFild).SendKeys(responseMessage);
+        FillField(REPLY_TEXT_OF_THE_LETTER_INPUT_FILD, responseMessage);
     }
 
     public void ClickSendButton()
     {
-        _driver.FindElement(_replyLetterEnterButton).Click();
-        Console.WriteLine($"Reply to letter");
-        WaitUntil.WaitSomeInterval(2);
+        ClickElement(REPLY_LETTER_ENTER_BUTTON);
     }
 
-    public static By GetLetterxPath(string body)
+    public void OpenLetter(string letterBody)
     {
-        return By.XPath($"//*[contains(text(), '{body}')]");
+        IWebElement letter = FindeElementByXPathWithRefresh(GetLetterXPath(letterBody));
+        Console.WriteLine($"Found letter is {letter.Text}");
+        ClickElement(letter);
+    }
+
+    public string GetLetterBody()
+    {
+        return GetElementText(LETTER_BODY_XPATH);
     }
 
 }

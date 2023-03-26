@@ -1,39 +1,35 @@
-﻿using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium;
-
-namespace Selenium;
+﻿namespace Selenium;
 public class Program
 {
-    private const string _login1 = "taskqaautotest1@gmail.com";
-    private const string _password1 = "123123123test";
+    const string LOGIN1 = "taskqaautotest1@gmail.com";
+    const string PASSWORD1 = "123123123test";
 
-    private const string _login2 = "taskqaautotest3@gmail.com";
-    private const string _password2 = "123123123test";
+    const string LOGIN2 = "taskqaautotest3@gmail.com";
+    const string PASSWORD2 = "123123123test";
+
+    const string TITLE = "New title(test)";
 
     static void Main(string[] args)
     {
-        WebDriver driver = new ChromeDriver();
-
-        Credentials credentials1 = new Credentials(_login1, _password1);
-        Credentials credentials2 = new Credentials(_login2, _password2);        
-        string title = "New title(test)";
+        Credentials credentials1 = new Credentials(LOGIN1, PASSWORD1);
+        Credentials credentials2 = new Credentials(LOGIN2, PASSWORD2);        
+        
         string sentMessage = RandomValueGenerator.RandomString(10);
         string responseMessage = RandomValueGenerator.RandomString(10);
-        LetterInfo sentLetterInfo = new LetterInfo(title, sentMessage, credentials2.UserName);
+        LetterInfo sentLetterInfo = new LetterInfo(TITLE, sentMessage, credentials2.UserName);
 
-        Gmail mail = new Gmail(driver);
+        Gmail mail = new Gmail();
         mail.LogIn(credentials1);
         mail.SendLetter(sentLetterInfo);
         mail.LogOut();
 
         mail.LogIn(credentials2);
-        mail.NavigateToLetter(sentMessage);
-        mail.ReplyToLetter(responseMessage);
+        mail.ReplyToLetter(sentMessage, responseMessage);
         mail.LogOut();
 
         mail.LogIn(credentials1);
-        mail.NavigateToLetter(responseMessage);
+        mail.NavigateToInboxLetter(responseMessage);
 
-        driver.Close();            
+        mail.Close();            
     }
 }
