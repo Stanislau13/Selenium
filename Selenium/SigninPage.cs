@@ -22,6 +22,7 @@ public class SignInPage : Page
 
     public void LogIn(Credentials credentials)
     {
+        Log($"with username {credentials.UserName} and password {credentials.Password}");
         FillFieldAndClickToButton(LOGIN_INPUT_FILD, credentials.UserName, LOGIN_INPUT_BUTTON);
         FillFieldAndClickToButton(PASS_INPUT_FILD, credentials.Password, PASS_INPUT_BUTTON);
 

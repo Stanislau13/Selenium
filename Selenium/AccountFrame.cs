@@ -4,7 +4,7 @@ namespace Selenium;
 
 public class AccountFrame : Page
 {
-    const string ACCOUNT_MANAGEMENT_BUTTON = "//a[@class='gb_e gb_1a gb_s']";
+    const string ACCOUNT_MANAGEMENT_BUTTON = "//a[@class='gb_e gb_3a gb_v']";
     const string ACCOUNT_LOG_OUT_BUTTON = "//div[text()='Выйти']";
     const string FRAME_NAME = "account";
 
@@ -24,5 +24,6 @@ public class AccountFrame : Page
     public void ClickLogOutButton()
     {
         ClickElement(ACCOUNT_LOG_OUT_BUTTON);
+        Log();
     }
 }

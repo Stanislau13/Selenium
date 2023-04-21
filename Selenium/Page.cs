@@ -78,13 +78,13 @@ public abstract class Page
 
     protected IWebElement FindeElementByXPath(string xPath) 
     {
-        Console.WriteLine(xPath);
+        Log(xPath);
         return _wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath(xPath)));
     }
 
     protected IWebElement FindeElementByXPathWithRefresh(string xPath)
     {
-        Console.WriteLine(xPath);
+        Log(xPath);
 
         return _wait.Until(drv =>
         {
@@ -112,4 +112,25 @@ public abstract class Page
     {
         _wait.Until(ExpectedConditions.UrlContains(partOfUrl));
     }
+
+    protected void Log()
+    {
+        Log(null);
+    }
+
+    protected void Log(string? messsage)
+    {
+        using (var logger = new Logger())
+        {
+            if (messsage is null)
+            {
+                logger.WriteToLog();
+            }
+            else
+            {
+                logger.WriteToLog(messsage);
+            }
+        }
+    }
+
 }

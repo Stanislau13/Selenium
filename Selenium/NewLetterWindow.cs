@@ -18,7 +18,7 @@ public class NewLetterWindow : Page
     {
         NewLetterWindow newLetterWindow = new NewLetterWindow(driver);
         newLetterWindow.ClickElement(TO_WRITE_A_LETTER_BUTTON);
-        Console.WriteLine("Clik to the new letter button");
+        newLetterWindow.Log("Clik to the new letter button");
         return newLetterWindow;
     }
 
@@ -32,7 +32,7 @@ public class NewLetterWindow : Page
     public void Send()
     {
         ClickElement(SEND_LETTER_ENTER_BUTTON);
-        Console.WriteLine("Sent a letter");
+        Log();
     }
     
 }

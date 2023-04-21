@@ -37,7 +37,7 @@ public class InboxPage : Page
     public void OpenLetter(string letterBody)
     {
         IWebElement letter = FindeElementByXPathWithRefresh(GetLetterXPath(letterBody));
-        Console.WriteLine($"Found letter is {letter.Text}");
+        Log($"Found letter is {letter.Text}");
         ClickElement(letter);
     }
 

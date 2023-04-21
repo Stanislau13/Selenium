@@ -19,6 +19,7 @@ public class Program
         LetterInfo sentLetterInfo = new LetterInfo(TITLE, sentMessage, credentials2.UserName);
 
         Gmail mail = new Gmail();
+  
         mail.LogIn(credentials1);
         mail.SendLetter(sentLetterInfo);
         mail.LogOut();
