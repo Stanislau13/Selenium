@@ -7,12 +7,12 @@ public class SentPage : Page
 {
     const string URL = "https://mail.google.com/mail/u/0/#sent";
 
-    private SentPage(IWebDriver driver, string url) : base(driver, url)
+    private SentPage(IWebDriver driver, string url, LoggingOptions loggingOption) : base(driver, url, loggingOption)
     {
     }
 
-    public static SentPage Navigate(IWebDriver driver)
+    public static SentPage Navigate(IWebDriver driver, LoggingOptions loggingOption)
     {
-        return new SentPage(driver, URL);
+        return new SentPage(driver, URL, loggingOption);
     }
 }

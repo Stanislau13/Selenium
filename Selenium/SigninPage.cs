@@ -11,13 +11,13 @@ public class SignInPage : Page
 
     const string URL = "https://accounts.google.com/v3/signin/identifier?dsh=S319654989%3A1676542123495862&authuser=0&continue=https%3A%2F%2Fmyaccount.google.com%2F&ec=GAlAwAE&hl=ru&service=accountsettings&flowName=GlifWebSignIn&flowEntry=AddSession";
 
-    private SignInPage(IWebDriver driver, string url) : base(driver, url)
+    private SignInPage(IWebDriver driver, string url, LoggingOptions loggingOption) : base(driver, url, loggingOption)
     {
     }
 
-    public static SignInPage Navigate(IWebDriver driver)
+    public static SignInPage Navigate(IWebDriver driver, LoggingOptions loggingOption)
     {
-        return new SignInPage(driver, URL);
+        return new SignInPage(driver, URL, loggingOption);
     }
 
     public void LogIn(Credentials credentials)

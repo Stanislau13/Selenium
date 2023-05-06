@@ -10,13 +10,13 @@ public class InboxPage : Page
     const string LETTER_BODY_XPATH = "//div[@class='a3s aiL '][1]";
     const string URL = "https://mail.google.com/mail/u/1/?ogbl#inbox";
 
-    private InboxPage(IWebDriver driver, string url) : base(driver, url)
+    private InboxPage(IWebDriver driver, string url, LoggingOptions loggingOption) : base(driver, url, loggingOption)
     {        
     }
 
-    public static InboxPage Navigate(IWebDriver driver)
+    public static InboxPage Navigate(IWebDriver driver, LoggingOptions loggingOption)
     {
-        return new InboxPage(driver, URL);
+        return new InboxPage(driver, URL, loggingOption);
     }    
 
     public void ClickReplyButton()

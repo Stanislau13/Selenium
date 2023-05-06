@@ -1,44 +1,36 @@
-﻿using OpenQA.Selenium.DevTools;
-using System.Reflection;
-using System.Text;
+﻿using System.Reflection;
 
-public class Logger : IDisposable
+namespace Selenium;
+
+public abstract class Logger : ILogger
 {
-    private readonly StreamWriter _streamWriter;
-    private const string PATH = "d:\\Stas\\обучение\\log.txt";
-
-    public Logger()
-    {
-        _streamWriter = new StreamWriter(PATH, true, Encoding.UTF8);
-    }
 
     public void WriteToLog(string message)
     {
-        var messageWithMethodName = MessageWithMethodName();
+        var messageWithMethodName = MessageWithMethodInfo();
         Log($"{messageWithMethodName} {message}");
     }
 
     public void WriteToLog()
     {
-        Log(MessageWithMethodName());
+        Log(MessageWithMethodInfo());
     }
 
-    public void Dispose()
-    {
-        _streamWriter.Dispose();
-    }
+    public abstract void Log(string message);
 
-    private void Log(string message)
-    {
-        _streamWriter.WriteLine($"[{DateTime.Now}] {message}");
-    }
-
-    private string MessageWithMethodName()
+    private string MessageWithMethodInfo()
     {
         var stackTrace = new System.Diagnostics.StackTrace();
-        var method = stackTrace.GetFrame(3)?.GetMethod();
+        var method = stackTrace.GetFrame(4)?.GetMethod();
+        var parameters = method?.GetParameters();
+
+         foreach (ParameterInfo param in parameters)
+    {
+        Console.WriteLine(param.Name + " = " + param.DefaultValue);
+    }
+
         var methodName = method is null ? "" : method.Name;
-        return $"Method '{methodName}' is running";
+        var stringParams = parameters is null ? "without parameters" : $"with {string.Join(", ", (object[]) parameters)}";
+        return $"Method '{methodName}' {stringParams} is running";
     }
 }
-

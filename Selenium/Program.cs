@@ -12,14 +12,14 @@ public class Program
     static void Main(string[] args)
     {
         Credentials credentials1 = new Credentials(LOGIN1, PASSWORD1);
-        Credentials credentials2 = new Credentials(LOGIN2, PASSWORD2);        
-        
+        Credentials credentials2 = new Credentials(LOGIN2, PASSWORD2);
+
         string sentMessage = RandomValueGenerator.RandomString(10);
         string responseMessage = RandomValueGenerator.RandomString(10);
         LetterInfo sentLetterInfo = new LetterInfo(TITLE, sentMessage, credentials2.UserName);
 
-        Gmail mail = new Gmail();
-  
+        Gmail mail = new Gmail(LoggingOptions.Xml);
+
         mail.LogIn(credentials1);
         mail.SendLetter(sentLetterInfo);
         mail.LogOut();
@@ -31,6 +31,6 @@ public class Program
         mail.LogIn(credentials1);
         mail.NavigateToInboxLetter(responseMessage);
 
-        mail.Close();            
+        mail.Close();
     }
 }

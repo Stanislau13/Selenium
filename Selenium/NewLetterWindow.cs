@@ -10,13 +10,13 @@ public class NewLetterWindow : Page
     const string TEXT_OF_THE_LETTER_INPUT_FILD = "//div[@class='Am Al editable LW-avf tS-tW']";
     const string SEND_LETTER_ENTER_BUTTON = "//div[@class='T-I J-J5-Ji aoO v7 T-I-atl L3']";
 
-    private NewLetterWindow(IWebDriver driver) : base(driver) 
+    private NewLetterWindow(IWebDriver driver, LoggingOptions loggingOption) : base(driver, loggingOption) 
     {
     }
 
-    public static NewLetterWindow Navigate(IWebDriver driver) 
+    public static NewLetterWindow Navigate(IWebDriver driver, LoggingOptions loggingOption) 
     {
-        NewLetterWindow newLetterWindow = new NewLetterWindow(driver);
+        NewLetterWindow newLetterWindow = new NewLetterWindow(driver, loggingOption);
         newLetterWindow.ClickElement(TO_WRITE_A_LETTER_BUTTON);
         newLetterWindow.Log("Clik to the new letter button");
         return newLetterWindow;

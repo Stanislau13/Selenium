@@ -12,18 +12,31 @@ public abstract class Page
     Actions _actions;
     WebDriverWait _wait;
 
-    protected Page(IWebDriver driver) 
+    LoggingOptions _loggingOption;
+    XmlLogger _xmlLogger;
+
+    protected Page(IWebDriver driver, LoggingOptions loggingOption) 
     {
         _driver = driver;
+        _loggingOption = loggingOption;
         _actions = new Actions(_driver);
         _wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(10));
         _wait.PollingInterval = TimeSpan.FromSeconds(2);
         _wait.IgnoreExceptionTypes(typeof(NoSuchElementException));
+        _xmlLogger = new XmlLogger();
     }
 
-    protected Page(IWebDriver driver, string url) : this(driver)
+    protected Page(IWebDriver driver) : this(driver, LoggingOptions.Txt)
+    {
+    }
+
+    protected Page(IWebDriver driver, string url, LoggingOptions loggingOption) : this(driver, loggingOption)
     {
         GoToUrl(url);
+    }
+
+    protected Page(IWebDriver driver, string url) : this(driver, url, LoggingOptions.Txt)
+    {
     }
 
     public string GetCurrentUrl() 
@@ -118,19 +131,33 @@ public abstract class Page
         Log(null);
     }
 
-    protected void Log(string? messsage)
+    public void Log(string? message)
     {
-        using (var logger = new Logger())
-        {
-            if (messsage is null)
-            {
-                logger.WriteToLog();
-            }
-            else
-            {
-                logger.WriteToLog(messsage);
-            }
+        switch (_loggingOption)
+        {           
+            case LoggingOptions.Xml:                
+                WriteToLog(message, _xmlLogger);                
+                break;
+
+            default:
+                using (var logger = new TxtLogger())
+                {
+                    WriteToLog(message, logger);
+                }
+                break;
         }
     }
 
+    private void WriteToLog(string? messsage, ILogger logger) 
+    {
+
+        if (messsage is null)
+        {
+            logger.WriteToLog();
+        }
+        else
+        {
+            logger.WriteToLog(messsage);
+        }
+    }
 }
